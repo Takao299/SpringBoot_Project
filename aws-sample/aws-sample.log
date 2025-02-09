@@ -88,3 +88,51 @@
 2025/02/09 08:28:52 INFO  [RMI TCP Connection(2)-127.0.0.1] - Closing JPA EntityManagerFactory for persistence unit 'default'
 2025/02/09 08:28:52 INFO  [RMI TCP Connection(2)-127.0.0.1] - HikariPool-1 - Shutdown initiated...
 2025/02/09 08:28:52 INFO  [RMI TCP Connection(2)-127.0.0.1] - HikariPool-1 - Shutdown completed.
+2025/02/09 09:12:34 INFO  [restartedMain] - Starting AwsSampleApplication using Java 17.0.8.1 on DESKTOP-RULUNF3 with PID 22168 (E:\github\SpringBoot_Project\aws-sample\target\classes started by cruru in E:\github\SpringBoot_Project\aws-sample)
+2025/02/09 09:12:34 INFO  [restartedMain] - The following 1 profile is active: "local"
+2025/02/09 09:12:35 INFO  [restartedMain] - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025/02/09 09:12:35 INFO  [restartedMain] - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025/02/09 09:12:44 INFO  [restartedMain] - Multiple Spring Data modules found, entering strict repository configuration mode
+2025/02/09 09:12:44 INFO  [restartedMain] - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.AdminUserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.AttachedFileRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.BusinessHourRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.FacilityRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.MailCodeRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.MemberRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.PermissionHourRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.ReservationRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.SessionIdRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.example.repository.TemporaryBusinessRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2025/02/09 09:12:44 INFO  [restartedMain] - Finished Spring Data repository scanning in 32 ms. Found 0 JDBC repository interfaces.
+2025/02/09 09:12:44 INFO  [restartedMain] - Multiple Spring Data modules found, entering strict repository configuration mode
+2025/02/09 09:12:44 INFO  [restartedMain] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025/02/09 09:12:44 INFO  [restartedMain] - Finished Spring Data repository scanning in 33 ms. Found 10 JPA repository interfaces.
+2025/02/09 09:12:53 INFO  [restartedMain] - BeanFactory id=7817f335-9760-36a0-9681-884b97e0ffbb
+2025/02/09 09:12:53 INFO  [restartedMain] - Bean 'credentialsProvider' of type [com.amazonaws.auth.DefaultAWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2025/02/09 09:12:53 INFO  [restartedMain] - Tomcat initialized with port(s): 8080 (http) 8009 (http)
+2025/02/09 09:12:53 INFO  [restartedMain] - Initializing ProtocolHandler ["ajp-nio-127.0.0.1-8009"]
+2025/02/09 09:12:53 INFO  [restartedMain] - Starting service [Tomcat]
+2025/02/09 09:12:53 INFO  [restartedMain] - Starting Servlet engine: [Apache Tomcat/9.0.64]
+2025/02/09 09:12:53 INFO  [restartedMain] - Initializing Spring embedded WebApplicationContext
+2025/02/09 09:12:53 INFO  [restartedMain] - Root WebApplicationContext: initialization completed in 18489 ms
+2025/02/09 09:12:53 INFO  [restartedMain] - HikariPool-1 - Starting...
+2025/02/09 09:12:53 INFO  [restartedMain] - HikariPool-1 - Start completed.
+2025/02/09 09:12:54 INFO  [restartedMain] - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025/02/09 09:12:54 INFO  [restartedMain] - HHH000412: Hibernate ORM core version 5.6.9.Final
+2025/02/09 09:12:54 INFO  [restartedMain] - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2025/02/09 09:12:54 INFO  [restartedMain] - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2025/02/09 09:12:55 INFO  [restartedMain] - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2025/02/09 09:12:55 INFO  [restartedMain] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025/02/09 09:12:55 INFO  [restartedMain] - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5d0a5eba, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1e83d9b0, org.springframework.security.web.context.SecurityContextPersistenceFilter@35cd8c34, org.springframework.security.web.header.HeaderWriterFilter@38fe45d4, org.springframework.security.web.csrf.CsrfFilter@4643ec2b, org.springframework.security.web.authentication.logout.LogoutFilter@15ba1278, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@192c12a1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d9ed819, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@785aa145, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@577d0881, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2105f3e1, org.springframework.security.web.session.SessionManagementFilter@4c041622, org.springframework.security.web.access.ExceptionTranslationFilter@21232012, org.springframework.security.web.access.intercept.AuthorizationFilter@2cd1ef5a]
+2025/02/09 09:12:56 INFO  [restartedMain] - LiveReload server is running on port 35729
+2025/02/09 09:12:56 INFO  [restartedMain] - Starting ProtocolHandler ["ajp-nio-127.0.0.1-8009"]
+2025/02/09 09:12:56 INFO  [restartedMain] - Tomcat started on port(s): 8080 (http) 8009 (http) with context path '/aws-sample'
+2025/02/09 09:12:57 INFO  [restartedMain] - Started AwsSampleApplication in 22.372 seconds (JVM running for 23.006)
+2025/02/09 09:13:06 INFO  [http-nio-8080-exec-1] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025/02/09 09:13:06 INFO  [http-nio-8080-exec-1] - Initializing Servlet 'dispatcherServlet'
+2025/02/09 09:13:06 INFO  [http-nio-8080-exec-1] - Completed initialization in 0 ms
+2025/02/09 09:13:19 INFO  [RMI TCP Connection(2)-127.0.0.1] - Application shutdown requested.
+2025/02/09 09:13:19 INFO  [RMI TCP Connection(2)-127.0.0.1] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025/02/09 09:13:19 INFO  [RMI TCP Connection(2)-127.0.0.1] - HikariPool-1 - Shutdown initiated...
+2025/02/09 09:13:19 INFO  [RMI TCP Connection(2)-127.0.0.1] - HikariPool-1 - Shutdown completed.
