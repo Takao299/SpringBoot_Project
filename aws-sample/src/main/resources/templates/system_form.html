@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+</head>
+<body>
+
+  <!-- トーストの表示 -->
+  <div layout:fragment="toast"
+    th:replace="~{fragments/toast :: toast}">
+  </div>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+  
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content" class="bg-image">
+    <div class="container pt-4">
+		
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center">
+        <div class="card shadow" style="max-width: 480px;">
+		  <div class="card-header text-center text-navy">
+		    予約不可・キャンセル不可時間（分単位）
+		  </div>
+          <div class="card-body">
+		    <form th:action="@{/system/update2}" method="post" th:object="${permissionHour}">
+				
+				<input type="hidden" th:field="*{id}">
+				
+				<div class="row">
+				  <div class="col"><small class="text-muted">予約不可時間</small></div>
+				  <div class="col"><small class="text-muted">キャンセル不可時間</small></div>
+				  <div class="col"></div>
+				</div>
+				
+				<div class="row">
+					  <div class="col">
+						<input class="form-control input-sm" type="number" min="0" max="1440" required th:field="*{nonReservableTime}">
+					  </div>
+					  <div class="col">
+						<input class="form-control input-sm" type="number" min="0" max="1440" required th:field="*{nonCancellableTime}">
+					  </div>
+					  <div class="col" sec:authorize="hasAuthority('EDIT_BUSINESS')">
+						<button class="w-100 btn btn-navy btn-sm" type="submit" th:formaction="@{/system/update2}" id="liveToastBtn">
+	                		更新
+	              		</button>
+					  </div>
+				</div>
+            </form>
+		  </div>
+        </div>
+      </div>
+		
+
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center mt-1">
+        <div class="card shadow" style="max-width: 480px;">
+		  <div class="card-header text-center text-navy">
+		    営業時間
+		  </div>
+          <div class="card-body">
+		    <form th:action="@{/system/update}" method="post" th:object="${bhf}">
+				
+				<div class="container text-center mb-2">
+
+					<div class="row mb-1">
+					  <div class="col-4">曜日</div>
+					  <div class="col">営／休</div>
+					  <div class="col">開始時間</div>
+					  <div class="col">終了時間</div>
+					</div>
+					
+					<div class="row mb-1" th:each="bh, stat : ${bhf.businessHours}">
+					  <input type="hidden" th:field="${bhf.businessHours[__${stat.index}__].id}">
+					  <input type="hidden" th:field="${bhf.businessHours[__${stat.index}__].dayName}">
+					  <div class="col-4 text-start" th:text="${bh.dayName}"></div>
+					  <div class="col d-flex justify-content-end">
+						<div class="form-check form-switch">
+	  						<input class="form-check-input" type="checkbox" role="switch" 
+	  						id="bh.isOpen" 
+	  						th:value="'on'" 
+	  						th:field="${bhf.businessHours[__${stat.index}__].isOpen}" />
+	            			<label th:for="${bhf.businessHours[__${stat.index}__].isOpen}" class="form-check-label"></label>
+						</div>
+					  </div>
+					  <div class="col">
+						<input class="form-control input-sm" type="number" min="0" max="23"required 
+						th:field="${bhf.businessHours[__${stat.index}__].openTime}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="${bhf.businessHours[__${stat.index}__].openTime}"></div>
+					  </div>
+					  <div class="col">
+						<input class="form-control input-sm" type="number" min="0" max="23"required 
+						th:field="${bhf.businessHours[__${stat.index}__].closeTime}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="${bhf.businessHours[__${stat.index}__].closeTime}"></div>
+					  </div>
+					</div>
+					
+				</div>
+				
+				  <!--相関チェックのエラーメッセージを表示する。-->
+	              <div class="mb-3">
+		              <div class="alert alert-danger" role="alert" th:each="error : ${#fields.globalErrors()}">
+						   <span style="color:red" th:text="${error}"></span>
+					  </div>
+				  </div>
+				
+            <!--
+            はまった点
+            前者でやると
+            An error happened during template parsing (template: "class path resource [templates/system_form.html]")
+			Neither BindingResult nor plain target object for bean name 'bh' available as request attribute
+			だの
+			No primary or single unique constructor found for interface java.util.List
+			だのエラーが出た。繰り返し内とはいえ、th:field内は完全なプロパティ名にしないといけないっぽい
+            <div th:each="bh  : ${bhf.businessHours}">
+				<span th:text="${bh.dayName}"></span>
+				<input type="text" th:field="${bh.dayName}" form="form1">
+			</div>
+			
+			↓↓↓↓↓↓↓↓↓↓↓↓
+              
+            <div th:each="bh, stat  : ${bhf.businessHours}" th:object="${bh}">
+				<span th:text="${bh.dayName}"></span>
+				<input type="text" th:field="${bhf.businessHours[__${stat.index}__].dayName}" form="form1">
+			</div>
+            -->
+ 
+				<div class="mt-4" sec:authorize="hasAuthority('EDIT_BUSINESS')">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/system/update}">
+	                	更新
+	              	</button>
+            	</div>
+            </form>
+		  </div>
+        </div>
+      </div>
+      
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center mt-1">
+        <div class="card shadow" style="max-width: 480px;">
+		  <div class="card-header text-center text-navy">
+		    臨時営業時間（営業時間より優先します）
+		  </div>
+          <div class="card-body">
+				<div class="container text-center mb-2">
+
+					<div class="row mb-1">
+					  <div class="col-4">日付</div>
+					  <div class="col-1">開</div>
+					  <div class="col">開始</div>
+					  <div class="col">終了</div>
+					  <div class="col"></div>
+					</div>
+					
+					<div class="row mb-1" th:each="bh, stat : ${bhf.temporaryBusiness}">
+					  <div class="col-4 text-start" th:text="${bh.rday}"></div>
+					  <div class="col-1"> <!--  d-flex justify-content-end -->
+						<div class="form-check form-switch">
+	  						<input class="form-check-input" type="checkbox" role="switch"
+	  						id="bh.isOpen"	  						
+	  						th:value="'on'" 
+	  						th:field="${bhf.temporaryBusiness[__${stat.index}__].isOpen}"disabled/>
+						</div>
+					  </div>
+					  <div class="col" th:text="${bh.openTime}"></div>
+					  <div class="col" th:text="${bh.closeTime}"></div>
+					  <div class="col">
+						<form th:action="@{/system/temp/delete}" method="post" sec:authorize="hasAuthority('EDIT_BUSINESS')">
+							<input type="hidden" name="tempId" th:value="${bhf.temporaryBusiness[__${stat.index}__].id}">
+			              	<button class="w-100 btn btn-outline-primary btn-sm" type="submit" th:formaction="@{/system/temp/delete}">
+			                	削除
+			              	</button>
+						</form>
+					  </div>
+					</div>
+				
+				</div>
+				
+			<form th:action="@{/system/temp}" method="post" th:object="${tempobj}">
+				<div class="row mt-3">
+      				  <div class="col-4 text-start">
+						<input class="form-control" type="text" id="datepicker" th:errorclass="is-invalid" th:field="*{rday}" required >
+		                <div class="invalid-feedback" th:errors="*{rday}"></div>
+						</div>
+					  <div class="col-1">
+						<div class="form-check form-switch">
+	  						<input class="form-check-input" type="checkbox" role="switch" 
+	  						id="isOpen" th:value="'on'" th:field="*{isOpen}" />
+	            			<label th:for="*{isOpen}" class="form-check-label"></label>
+						</div>
+					  </div>
+					  <div class="col">
+						<input class="form-control input-sm" type="number" min="0" max="23" required 
+						th:field="*{openTime}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{closeTime}"></div>
+					  </div>
+					  <div class="col">
+						<input class="form-control input-sm" type="number" min="0" max="23" required 
+						th:field="*{closeTime}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{closeTime}"></div>
+					  </div>
+					  <div class="col" sec:authorize="hasAuthority('EDIT_BUSINESS')">
+						<button class="w-100 btn btn-navy btn-sm" type="submit" th:formaction="@{/system/temp}">
+	                		追加
+	              		</button>
+					  </div>
+				</div>
+				
+				  <!--相関チェックのエラーメッセージを表示する。-->
+	              <div class="mt-1">
+		              <div class="alert alert-danger" role="alert" th:each="error : ${#fields.globalErrors()}">
+						   <span style="color:red" th:text="${error}"></span>
+					  </div>
+				  </div>
+
+			</form>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center mt-1">
+        <div class="card shadow" style="max-width: 480px;">
+          <div class="card-body">
+			<a class="w-100 btn btn-secondary" th:href="@{/}" role="button">ログイン情報画面へ戻る</a>
+
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    
+    
+    <!-- 臨時営業日重複防止用のJavascript -->
+	<script type="text/javascript" th:inline="javascript">
+		const tempday = /*[[${tempday}]]*/"tempday";
+		console.log(tempday);
+	</script>
+
+	<!-- 臨時営業日カレンダーのJavascript -->
+	<script th:src="@{/js/datepickerCalendarTemp.js}" type="text/javascript"></script>
+  
+	<!-- トースト表示のJavascript -->
+	<script th:src="@{/js/snippets.js}" type="text/javascript"></script>
+
+  </main>
+
+</body>
+
+  
+</html>

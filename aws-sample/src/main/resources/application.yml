@@ -1,0 +1,68 @@
+## Spring
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  application:
+    name: aws-sample
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      # ここでのファイルサイズエラーはHTTPレスポンス500になる
+  main:
+    allow-bean-definition-overriding: true
+    
+  ## メール認証用 (GmailのSMTPサーバーを利用)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: # 送信用メールアドレスを記入
+    password: # パスワードを記入
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true    
+    
+## Tomcat
+server:
+  servlet:
+    context-path: /aws-sample
+    
+## com.amazonaws.SdkClientException: Failed to connect to service endpoint: エラー対策
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+          
+# AWS
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-3
+    instance:
+      data:
+        enabled: true
+    s3:
+      endpoint: https://s3.ap-northeast-3.amazonaws.com
+      
+
+# アップロードファイルサイズ制限（バリデーション制御用）単位はMB  
+my-file-size:
+  size: 1
+
+# android用セッション有効期限設定
+android-setting:
+  session-time:
+    login:
+      day: 1
+      hour: 0
+      minute: 0
+    codepage:
+      hour: 0
+      minute: 10

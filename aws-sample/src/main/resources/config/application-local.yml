@@ -1,0 +1,41 @@
+## Spring
+spring:
+  datasource:
+    ## H2用
+    #url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #driver-class-name: org.h2.Driver
+    #username: sa
+    #password:
+    
+    ## Postgres用
+    #url: jdbc:postgresql:wt2db
+    #driver-class-name: org.postgresql.Driver
+    #username: wt2user
+    #password: password
+    
+    ## MySQL用
+    url: jdbc:mysql://localhost:3306/wt3db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: user
+    password: password
+  sql:
+    init:
+      encoding: UTF-8
+      mode: always
+      schema-locations: classpath:/schema/schema-h2.sql
+      data-locations: classpath:/schema/data-h2.sql
+  ## JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    
+    
+## Upload file save dir
+attached:
+ file:
+  path: C:/spbt/uploadFiles
+attachedtemp:
+ file:
+  path: C:/spbt/temp
+  

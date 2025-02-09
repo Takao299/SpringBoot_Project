@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+  <link th:href="@{/css/member_list.css}" rel="stylesheet"> <!--ソート機能用のCSS-->
+</head>
+
+<body>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content"
+    class="offcanvas-outside bg-light">
+    <div class="container-fluid">
+
+      <!-- トグルボタン -->
+      <div th:replace="~{fragments/sidebar :: toggler}">
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+          <div class="card shadow">
+			  
+            <div class="card-header">
+				<div class="row">
+        			<div class="col">
+		              <h6 class="text-navy my-2">
+		                会員一覧
+		              </h6>
+        			</div>
+        			<div class="col d-flex justify-content-end me-2" sec:authorize="hasAuthority('EDIT_MEMBER')">
+						<a class="btn btn-primary px-4" th:href="@{/member/form}" role="button">新規会員登録</a>
+        			</div>
+				</div>
+            </div>
+
+            <div class="card text-bg-secondary m-3">
+			  <form th:action="@{/member}" method="post" th:object="${queryModel}" novalidate>
+				<div class="row">
+						
+				    <div class="col-auto m-2">
+				      <input type="text" class="form-control" name="id" th:value="*{id}" placeholder="ID">
+				    </div>
+				    
+				    <div class="col-auto m-2">
+				      <input type="text" class="form-control" name="name" th:value="*{name}" placeholder="Name">
+				    </div>
+				    
+				    <div class="col-auto m-2">
+				      <input type="text" class="form-control" name="email" th:value="*{email}" placeholder="E-Mail">
+				    </div>
+				    
+				    <div class="col m-2">
+				      <button type="submit" class="btn btn-primary" th:formaction="@{/member}">検索</button>
+				    </div>
+					    
+				</div>
+			   </form>
+	          </div>
+	            
+				<input type="hidden" th:value="${pageModel.getNumber()}" name="page" id="pageId">
+				<input type="hidden" th:value="${pageModel.getSize()}" name="size" id="sizeId">
+			<!--<input type="text" th:value="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0]}" name="sortP" id="sortPId">
+				<input type="text" th:value="${#strings.arraySplit(pageModel.getSort().toString(),': ')[1]}" name="sortD" id="sortDId">-->
+	            
+	            <div class="card-body table-responsive mb-3">
+	              <table id="user-table" class="table table-bordered">
+	                <thead>
+	                  <tr>
+	                    
+	                    <th:block th:if="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0].equals('id')}">
+		                    <th th:text="ID" id="id" 
+		                    th:classappend="${#strings.arraySplit(pageModel.getSort().toString(),': ')[1].equalsIgnoreCase('ASC')} ? 'asc' : 'desc'"></th>
+	                    </th:block>
+	                    <th:block th:unless="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0].equals('id')}">
+	                    	<th th:text="ID" id="id"></th>
+	                    </th:block>
+	                    	                    
+	                    <th:block th:if="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0].equals('name')}">
+		                    <th th:text="Name" id="name" 
+		                    th:classappend="${#strings.arraySplit(pageModel.getSort().toString(),': ')[1].equalsIgnoreCase('ASC')} ? 'asc' : 'desc'"></th>
+	                    </th:block>
+	                    <th:block th:unless="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0].equals('name')}">
+	                    	<th th:text="Name" id="name"></th>
+	                    </th:block>
+	                    
+	                    <th:block th:if="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0].equals('email')}">
+		                    <th th:text="E-Mail" id="email" 
+		                    th:classappend="${#strings.arraySplit(pageModel.getSort().toString(),': ')[1].equalsIgnoreCase('ASC')} ? 'asc' : 'desc'"></th>
+	                    </th:block>
+	                    <th:block th:unless="${#strings.arraySplit(pageModel.getSort().toString(),': ')[0].equals('email')}">
+	                    	<th th:text="E-Mail" id="email"></th>
+	                    </th:block>
+	                    
+	                    <td th:text="Stats" id="stats"></td>
+	                    
+	                  </tr>
+	                </thead>
+	                <tbody>
+	                  <tr th:each="member : ${pageModel}" th:object="${member}" th:if="${pageModel != null && pageModel.getTotalElements() != 0}">
+	                    <td th:text="*{id}"></td>
+	                    <td th:text="*{name}"></td>
+	                    <td th:text="*{email}"></td>
+	                    
+	                    <td>
+							<a th:if="*{deleteDateTime==null}" th:href="@{/member/form/__*{id}__}" th:text="詳細"></a>
+							<div th:unless="*{deleteDateTime==null}" th:text="退会済"></div>
+						</td>
+	                  </tr>
+	                </tbody>
+	                  <tfoot>
+						  <tr>
+				              <td colspan="3" class="text-center" th:unless="${pageModel != null && pageModel.getTotalElements() != 0}" 
+				              th:text="データがありません"></td>
+			              </tr>
+					  </tfoot>
+	              </table>
+				  <div layout:fragment="pagenation" th:replace="~{fragments/pagenation :: pagenation}"></div>
+            	</div>		  
+            
+          </div>
+
+        </div>
+      </div>
+    </div>
+   
+<script th:src="@{/js/sortButton.js}"></script>
+    
+  </main>
+
+</body>
+</html>

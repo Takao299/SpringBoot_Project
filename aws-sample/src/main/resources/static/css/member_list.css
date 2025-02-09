@@ -1,0 +1,36 @@
+/*ソート用*/
+  .container {
+    margin: 50px;
+  }
+
+  .table th {
+    cursor: pointer;
+    position: relative;
+  }
+
+  .table th::before, .table th::after {
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border: 5px solid transparent;
+    right: 10px;
+    top: 50%;
+  }
+
+  .table th::before {
+      border-bottom-color: #aaa;
+      margin-top: -10px;
+  }
+  .table th::after {
+      border-top-color: #aaa;
+      margin-top: 2px;
+  }
+  
+  
+  .table th.asc::before {
+      border-bottom-color: #444;
+  }
+  .table th.desc::after {
+      border-top-color: #444;
+  }

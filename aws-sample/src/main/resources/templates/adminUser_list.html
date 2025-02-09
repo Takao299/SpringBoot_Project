@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+</head>
+<body>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content"
+    class="offcanvas-outside bg-light">
+    <div class="container-fluid">
+      <!-- トグルボタン -->
+      <div th:replace="~{fragments/sidebar :: toggler}">
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+          <div class="card shadow">
+			  
+            <div class="card-header">
+				<div class="row">
+        			<div class="col">
+		              <h6 class="text-navy my-2">
+		                管理ユーザ一覧
+		              </h6>
+        			</div>
+        			<div class="col d-flex justify-content-end me-2" sec:authorize="hasAuthority('EDIT_ADMINUSER')">
+						<a class="btn btn-primary px-4" th:href="@{/adminUser/form}" role="button">新規管理ユーザ登録</a>
+        			</div>
+				</div>
+            </div>
+            
+            <div class="card-body table-responsive">
+              <table id="user-table" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>ユーザ名</th>
+                    <th>管理ユーザ</th>
+                    <th>会員管理</th>
+                    <th>施設管理</th>
+                    <th>予約管理</th>
+                    <th>営業時間管理</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="user : ${users}" th:object="${user}">
+                    <td><a th:href="@{/adminUser/__*{id}__}" th:text="*{id}"></a></td>
+                    <td th:text="*{username}"></td>
+                    <td th:text="*{authAdminUser.authName}"></td>
+                    <td th:text="*{authMember.authName}"></td>
+                    <td th:text="*{authFacility.authName}"></td>
+                    <td th:text="*{authReservation.authName}"></td>
+                    <td th:text="*{authBusiness.authName}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+  <!-- トースト -->
+  <div th:fragment="toast">
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" th:if="${toast_message != null}">
+	  <div id="liveToast" class="toast" role="status" aria-live="polite" aria-atomic="true" data-bs-delay='1500'>
+	    <div class="toast-body" th:text="${toast_message}"></div>
+	  </div>
+	</div>
+
+  </div>
+  
+</body>
+</html>

@@ -1,0 +1,118 @@
+
+/* Color */
+.bg-image {
+  background:
+    linear-gradient(to bottom,
+      rgba(34, 74, 190, 1),
+      rgba(34, 74, 190, 0.7)
+    )/*,
+    url('/images/photo.jpg')*/;
+  background-size: cover;
+  min-height:100vh
+}
+
+.text-navy {
+  color: #224abe;
+}
+
+.btn-navy {
+  color: white;
+  background-color: #224abe;
+}
+
+.btn-navy:hover {
+  color: white;
+  background-color: #0d47a1;
+}
+
+/* Off-Canvas (SideBar) */
+.offcanvas {
+  width: 200px !important;
+}
+
+@media (min-width: 992px) {
+  .offcanvas {
+    transform: none !important;
+    visibility: visible !important;
+  }
+
+  .offcanvas-outside {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 200px;
+  }
+}
+
+.btn-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  opacity: 0.5;
+  border: 0;
+}
+
+/* Link */
+a {
+  text-decoration: none;
+}
+
+/* Size */
+.mh-100 {
+  height: calc(100vh - 56px)
+}
+
+/* Table */
+.table > :not(:first-child) {
+    border-top: 0;
+}
+
+/* 画像プレビュー用 */
+#imgPreviewField {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 10px;
+  background: #efefef;
+}
+#imgPreviewField .item {
+  background: #fff;
+  padding: 10px;
+  width: 30%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+#imgPreviewField img{
+  width: 100px;
+  height: auto;
+}
+
+/*
+#imgPreviewField button {
+  margin-top: auto;
+
+  display: block;
+  background: #bf1319;
+  color: #fff;
+  line-height: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin: 1px;
+}*/
+	
+figure img{
+	border:solid 2px #ccc;
+}
+figure img:hover{
+	border:solid 2px #203aad;
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+  <script th:src="@{/js/uploadImage.js}" type="text/javascript"></script>
+  <script th:src="@{/js/deleteButton.js}" type="text/javascript"></script> 
+</head>
+<body>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+  
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content" class="bg-image">
+    <div class="container pt-4">
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center">
+
+        <div class="card shadow" style="max-width: 480px;">
+          <div class="card-body">
+            <h3 class="card-title mb-3 text-center text-navy">
+              施設登録
+            </h3>
+              
+              <div class="mb-0">
+				<label for="id" class="form-label">
+                  ID : 
+                </label>
+                <td th:text="${item.id}"></td>
+				<input type="hidden" th:field="${item.id}" form="form1" id="deleteid">
+              </div>
+              
+			 <div class="mb-0">
+                <label for="version" class="form-label">
+                  Version : 
+                </label>
+                <td th:text="${item.version}"></td>
+                <input type="hidden" th:field="${item.version}" form="form1">
+              </div>
+              
+            <!--<div class="mb-3">
+                <label for="token" class="form-label">
+                  token : 
+                </label>
+                <td th:text="${formData.token}"></td>
+                <input type="hidden" th:field="${formData.token}" form="form1">
+              </div>-->
+              
+              <div class="mb-3">
+                <label for="name" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  施設名
+                </label>
+                <input class="form-control" type="text"
+                  th:errorclass="is-invalid" th:field="${item.name}" form="form1">
+                <div class="invalid-feedback" th:errors="${item.name}">
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="amount" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  数量
+                </label>
+                <input class="form-control" type="number" min="1" max="99"
+                  th:errorclass="is-invalid" th:field="${item.amount}" form="form1">
+                <div class="invalid-feedback" th:errors="${item.amount}">
+                </div>
+              </div>
+              
+              <div class="mb-3">
+	            <label for="inputTextarea1" class="form-label">
+					<span class="badge bg-secondary">任意</span>
+					説明
+				</label>
+	            <textarea rows="3" cols="80" class="form-control" th:field="${item.memo}" form="form1"></textarea>
+	            <div class="invalid-feedback" th:errors="${item.memo}">
+				</div>
+              </div>               
+              
+              <div class="mb-5">
+                <label for="images" class="form-label">
+					<span class="badge bg-secondary">任意</span>
+                  画像　（3枚まで）
+                </label>
+        		<input type="file" accept="image/*" multiple="multiple" onchange="loadImage(this);" th:errorclass="is-invalid"
+        		th:field="${formData.fileContents}" class="form-control-file" id="inputFile" form="form1">   <!--th:field="${formData.fileContents}"-->
+    			<div class="invalid-feedback" th:errors="${formData.fileContents}"></div>
+    			<div id="imgPreviewField">
+					
+					<!-- 登録済画像ファイル(3枚分)　画像をクリックすると別タブに表示(ダウンロードできる) -->
+					<!--削除ボタンを押すとdelete初期値-1ではなくなる　　th:field="*{afId}"はできない -->
+					<th:block th:unless="${#lists.isEmpty(formData.attachedFiles)}" th:each="af, stat : ${formData.attachedFiles}" th:object="${af}">
+						<div class="item" th:if="*{delete_pic=='no_delete'}" th:id="*{afId}|">
+			                <figure><img th:src="@{/s3/images/dl/{ct}{fn}(ct = *{createTime},fn = *{fileName})}"
+							th:onclick="|location.href='__${formData.context_path}__/s3/download/__*{createTime}____*{fileName}__'|"></figure>
+	   						<button type="button" class="btn btn-outline-secondary btn-sm" th:value="*{afId}" onclick="deleteForm(this.value)">削除</button>
+						</div>
+						<input type="hidden" th:field="${formData.attachedFiles[__${stat.index}__].afId}" form="form1">
+						<input type="hidden" th:field="${formData.attachedFiles[__${stat.index}__].fileName}" form="form1">
+						<input type="hidden" th:field="${formData.attachedFiles[__${stat.index}__].createTime}" form="form1">
+						<input type="hidden" th:field="${formData.attachedFiles[__${stat.index}__].delete_pic}" th:id="|dlt${formData.attachedFiles[__${stat.index}__].afId}|" form="form1">
+					</th:block>
+						
+					<!-- 一時保存画像ファイル(3枚分) -->
+					<th:block th:unless="${#lists.isEmpty(formData.tempAFs)}" th:each="af, stat : ${formData.tempAFs}" th:object="${af}">
+						<div class="item" th:if="*{delete_pic=='no_delete'}" th:id="*{createTime + fileName}|">
+			                <figure><img th:src="@{/s3/images/tmp/{ct}{fn}(ct = *{createTime},fn = *{fileName})}"></figure>
+	   						<button type="button" class="btn btn-outline-secondary btn-sm" th:value="*{createTime + fileName}" onclick="deleteForm(this.value)">削除</button>
+						</div>
+						<input type="hidden" th:field="${formData.tempAFs[__${stat.index}__].fileName}" form="form1">
+						<input type="hidden" th:field="${formData.tempAFs[__${stat.index}__].createTime}" form="form1">
+						<input type="hidden" th:field="${formData.tempAFs[__${stat.index}__].delete_pic}" th:id="|dlt${formData.tempAFs[__${stat.index}__].createTime + formData.tempAFs[__${stat.index}__].fileName}|" form="form1">
+					</th:block>
+		         </div>
+                </div>
+               
+               <!--
+             <table class="tbtest">
+				<tr>
+				  <th>予約</th>
+				</tr>
+				
+				<tr th:each="reservation : ${item.reservationList}">
+				  <td th:text="${reservation.day}" class="tdtest"></td>
+				</tr>
+			 </table>
+			 -->
+
+	
+		
+		  <form th:action="@{/facility/form}" method="post" novalidate  enctype="multipart/form-data" id="form1">
+			  <div class="row mb-3">
+			  <th:block sec:authorize="hasAuthority('EDIT_FACILITY')">
+				<!-- 登録画面か編集画面か -->
+				  <div class="col" th:if="${item.id == null}">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/facility/form}" >
+	                	登録
+	              	</button>
+	              </div>
+	              
+	              <div class="col" th:if="${item.id != null}">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/facility/form}">
+	                	更新
+	              	</button>
+	              </div>
+	              <div class="col" th:if="${item.id != null}">
+	              	<!--<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/facility/delete}">-->
+					<button class="w-100 btn btn-navy" type="click" th:action="@{/facility/deleteButton}" id="actDelete">
+	                	削除
+	              	</button>
+	              </div>
+              </th:block>
+              </div>
+            </form>
+            
+            <form>
+				  <div class="mb-3">
+	              	<button class="w-100 btn btn-secondary" type="submit" th:formaction="@{/facility/cancel}">
+	                	一覧へ戻る
+	              	</button>
+              	  </div>    
+            </form>
+      
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

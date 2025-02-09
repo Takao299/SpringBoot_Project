@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/css/app.css}" rel="stylesheet">
+
+  <!-- DataTablesのCSSを追加-->
+  <link th:href="@{/webjars/datatables/css/dataTables.bootstrap5.min.css}" rel="stylesheet">
+  <link th:href="@{/webjars/datatables-buttons/css/buttons.dataTables.min.css}" rel="stylesheet">
+  
+  <!-- jQuery UIのCSS -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+  <!-- jQuery本体 -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- jQuery UI本体 -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+  <!-- 日本語化ファイル -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+  <!-- 日本の祝日 -->
+  <script src="https://cdn.rawgit.com/osamutake/japanese-holidays-js/v1.0.10/lib/japanese-holidays.min.js"></script>
+  
+  <!-- Bootstrap Bundle --> <!-- この位置で良いか -->
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+  <title>施設予約管理</title>
+</head>
+<body>
+  <!-- トーストの配置 -->
+  <div layout:fragment="toast">
+  </div>
+  
+  <!-- サイドバーの配置 -->
+  <div layout:fragment="sidebar">
+  </div>
+
+  <!-- コンテンツの配置 -->
+  <div layout:fragment="content">
+  </div>
+   
+  <!-- Bootstrap Bundleの初期位置 -->
+
+  <!-- DataTablesのJSを追加 -->	<!-- 以下1行を消した時、usertablesのページネーション,Excel,CSV,Print機能がどれくらい消えるか -->
+  <!-- <script th:src="@{/webjars/jquery/jquery.min.js}"></script>	全部消える -->
+  <script th:src="@{/webjars/datatables/js/jquery.dataTables.min.js}"></script>	<!-- 全部消える -->
+  <script th:src="@{/webjars/datatables/js/dataTables.bootstrap5.min.js}"></script>	<!-- ページネーション -->
+  <script th:src="@{/webjars/datatables-buttons/js/dataTables.buttons.min.js}"></script>	<!-- ExcelとCSV -->
+  <script th:src="@{/webjars/datatables-buttons/js/buttons.html5.min.js}"></script>	<!-- ExcelとCSV -->
+  <script th:src="@{/webjars/datatables-buttons/js/buttons.print.min.js}"></script>	<!-- Print -->
+  <script th:src="@{/webjars/jszip/jszip.min.js}"></script>		<!-- Excel -->
+</body>
+  <script th:src="@{/js/usertables.js}" th:unless="${listUrl=='member'}"></script>	<!-- 全部消える --> <!--会員管理のみusertablesを使わない-->
+
+</html>

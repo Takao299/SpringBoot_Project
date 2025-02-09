@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+  <script th:src="@{/js/timeList.js}" type="text/javascript"></script>
+    
+</head>
+<body>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+  
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content" class="bg-image">
+    <div class="container pt-4">
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center">
+
+        <div class="card shadow" style="max-width: 480px;">
+          <div class="card-body">
+            <h3 class="card-title mb-3 text-center text-navy">
+				<th:block th:if="${item.id == null}">
+					予約登録
+				</th:block>
+				<th:block th:if="${item.id != null}">
+					予約詳細
+				</th:block>
+            </h3>
+
+            <form th:action="@{/reservation/form}" th:object="${item}" method="post" novalidate>
+              
+              <div class="mb-3">
+				<label for="id" class="form-label">
+                  予約ID : 
+                </label>
+                <td th:text="*{id}"></td>
+				<input type="hidden" th:field="*{id}">
+              </div>
+              
+              <!-- 
+              <input type="hidden" th:field="*{nonReservableTime}">
+              <input type="hidden" th:field="*{nonCancellableTime}">
+              -->
+
+              
+		    <!-- 登録画面 -->
+		    <th:block th:if="*{id==null}">
+				
+		      <div class="mb-3">
+		        <label class="form-label" for="facility">
+					<span class="badge bg-danger">必須</span>
+					予約施設 : 
+				</label>
+	        	<select class="form-select" th:field="*{facility}" th:errorclass="is-invalid"  id="select_facility">
+	            	<option th:each="fac : ${facilities}" th:value="${fac.id}" th:text="${fac.name}"></option>
+	        	</select>
+	        	<div class="invalid-feedback" th:errors="*{facility}"></div>
+		      </div>
+		
+		      <div class="mb-3">
+		        <label class="form-label" for="member">
+					<span class="badge bg-danger">必須</span>
+					予約会員 : 
+				</label>
+	        	<select class="form-select" th:field="*{member}" th:errorclass="is-invalid" >
+	            	<option th:each="mem : ${members}" th:value="${mem.id}" th:text="${mem.name}"></option>
+	        	</select>
+	        	<div class="invalid-feedback" th:errors="*{member}"></div>
+		      </div>
+		      
+		          
+		      <div class="mb-3">
+                <label for="rday" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  予約日 : 
+                </label>
+                <input class="form-control" type="text" id="datepicker" 
+                th:errorclass="is-invalid" th:field="*{rday}" th:action="@{/reservation/select}">
+                <div class="invalid-feedback" th:errors="*{rday}"></div>
+              </div>    
+              
+              <!--
+              <div class="mb-3">
+                <label for="rday" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  予約日 : 
+                </label>
+                <input class="form-control" type="date" th:errorclass="is-invalid" th:field="*{rday}" id="select_day"
+                th:action="@{/reservation/select}">
+                <div class="invalid-feedback" th:errors="*{rday}"></div>
+              </div>
+              -->              
+			   
+			  <div class="mb-5">
+                <label for="rstart" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  予約時間 : 
+                </label>
+				<select class="form-select" id="dropdownlist" th:onchange="timeChange(this);"
+				th:classappend="${#fields.hasErrors('rstart')} ? 'is-invalid' : ''" ><!--multiple aria-label="multiple select example"-->
+					<option th:value="0" th:text="時間を選択してください"></option>
+					<option th:each="item : ${timeList}" th:value="${item.rstart} + ',' + ${item.rend}" 
+					th:text="${item.rstart} + ' ～ ' + ${item.rend}" th:disabled="${item.reserved==true}"></option>
+				</select>
+				<input class="form-control" type="hidden" th:errorclass="is-invalid" th:field="*{rstart}" id="r-start">
+				<input class="form-control" type="hidden" th:field="*{rend}" id="r-end">
+			  </div>
+			  
+			</th:block>
+			  
+			  
+			<!-- 編集画面 -->
+			<th:block th:if="*{id!=null}">
+				
+		      <div class="mb-3">
+		        <label class="form-label" for="facility">
+					予約施設 : 
+				</label>
+				<td th:text="*{facility.name}"></td>
+				<input type="hidden" th:field="*{facility}">
+		      </div>
+		
+		      <div class="mb-3">
+		        <label class="form-label" for="member">
+					予約会員 : 
+				</label>
+				<td th:text="*{member.name}"></td>
+				<input type="hidden" th:field="*{member}">
+		      </div>
+				
+			  <div class="mb-3">
+                <label for="rday" class="form-label">
+                  予約日 : 
+                </label>
+            	<td th:text="*{rday}"></td>
+				<input type="hidden" th:field="*{rday}">
+              </div>   
+              
+              <div class="mb-3">
+                <label for="rstart" class="form-label">
+                  予約時間 : 
+                </label>
+            	<td th:text="${item.rstart} + ' ～ ' + ${item.rend}"></td>
+				<input type="hidden" th:field="*{rstart}">
+				<input type="hidden" th:field="*{rend}">
+              </div>
+              
+			</th:block>
+		    
+
+              <!--相関チェックのエラーメッセージを表示する。-->
+              <div class="mb-3">
+	              <div class="alert alert-danger" role="alert" th:each="error : ${#fields.globalErrors()}">
+					   <span style="color:red" th:text="${error}"></span>
+				  </div>
+			  </div>
+			    
+			
+			<th:block sec:authorize="hasAuthority('EDIT_RESERVATION')">
+			<!-- 登録画面か編集画面か -->
+				<div class="row mb-3">
+			  	  <div class="col" th:if="*{id == null}">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/reservation/form}">
+	                	登録
+	              	</button>
+	              </div>
+	              
+	              <!--
+	              <div class="col" th:if="*{id != null}">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/reservation/form}">
+	                	更新
+	              	</button>
+	              </div>
+	              	-->
+	              <div class="col" th:if="*{id != null}">
+	              	<!-- 今日が予約日より小さい
+						 または、今日が予約日と同じだが現在時間が予約開始時間より小さい
+					  -->
+	              	<th:block th:if="${ (#temporals.createToday() lt item.rday) 
+	              					|| ((#temporals.createToday() eq item.rday)
+	              						&&(#temporals.hour(#temporals.createNow()) lt #temporals.hour(item.rstart))) }">
+	              		<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/reservation/delete}">
+	                		キャンセル
+	              		</button>
+	              	</th:block>
+	              </div>
+				</div>
+			</th:block>
+            </form>
+
+				<form>
+				  <div class="row mb-3">
+				  	<div class="col">
+		              	<button class="w-100 btn btn-secondary" type="submit" th:formaction="@{/reservation/cancel}">
+		                	予約一覧
+		              	</button>
+				  	</div>
+				  	
+				  	<div class="col">
+		              	<button class="w-100 btn btn-secondary" type="submit" th:formaction="@{/member/cancel}">
+		                	会員一覧
+		              	</button>
+				  	</div>
+				  </div>   
+				</form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  
+
+  
+  <script type="text/javascript" th:inline="javascript">
+            const offday = /*[[${offday}]]*/"offday";
+            const tonday = /*[[${tonday}]]*/"tonday";
+            const toffday = /*[[${toffday}]]*/"toffday";
+            console.log(tonday);
+            console.log(toffday);
+  </script>
+  
+  <script th:src="@{/js/datepickerCalendar.js}" type="text/javascript"></script>
+  
+  </main>
+
+</body>
+</html>

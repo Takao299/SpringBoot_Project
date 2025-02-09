@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+</head>
+<body>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content"
+    class="offcanvas-outside bg-light">
+    <div class="container-fluid">
+      <!-- トグルボタン -->
+      <div th:replace="~{fragments/sidebar :: toggler}">
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+          <div class="card shadow">
+			  
+            <div class="card-header">
+				<div class="row">
+        			<div class="col">
+		              <h6 class="text-navy my-2">
+		                施設一覧
+		              </h6>
+        			</div>
+        			<div class="col d-flex justify-content-end me-2" sec:authorize="hasAuthority('EDIT_FACILITY')">
+						<a class="btn btn-primary px-4" th:href="@{/facility/form}" role="button">新規施設登録</a>
+        			</div>
+				</div>
+            </div>
+            
+            <div class="card-body table-responsive">
+              <table id="user-table" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>施設名</th>
+                    <th>数量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="item : ${items}" th:object="${item}">
+                    <td><a th:href="@{/facility/__*{id}__}" th:text="*{id}"></a></td>
+                    <td th:text="*{name}"></td>
+                    <td th:text="*{amount}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

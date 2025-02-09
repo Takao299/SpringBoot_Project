@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}">
+<head>
+  <meta charset="UTF-8" th:remove="tag">
+  <script th:src="@{/js/deleteButton.js}" type="text/javascript"></script>  
+</head>
+<body>
+
+  <!-- サイドバーの表示 -->
+  <div layout:fragment="sidebar"
+    th:replace="~{fragments/sidebar :: sidebar}">
+  </div>
+  
+  <!-- コンテンツの表示 -->
+  <main layout:fragment="content" class="bg-image">
+    <div class="container pt-4">
+      <!-- 左右中央に配置 -->
+      <div class="row justify-content-center">
+
+        <div class="card shadow" style="max-width: 480px;">
+          <div class="card-body">
+            <h3 class="card-title mb-3 text-center text-navy">
+              会員登録
+            </h3>
+
+            <form th:action="@{/member/form}" th:object="${member}"
+              method="post" novalidate>
+              
+               <div class="mb-0">
+				<label for="id" class="form-label">
+                  ID : 
+                </label>
+                <td th:text="*{id}"></td>
+				<input type="hidden" th:field="*{id}" id="deleteid">
+              </div>
+              
+              <div class="mb-3">
+                <label for="name" class="form-label">
+                  Version : 
+                </label>
+                <td th:text="*{version}"></td>
+                <input type="hidden" th:field="*{version}">
+              </div>
+              
+               <div class="mb-3">
+                <label for="email" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  メールアドレス
+                </label>
+                <input class="form-control" type="email"
+                  th:errorclass="is-invalid" th:field="*{email}">
+                <div class="invalid-feedback" th:errors="*{email}">
+                </div>
+              </div>
+              
+              <!--class typeのエラーメッセージを表示する。-->
+              <div th:each="error : ${#fields.globalErrors()}">
+				   <span style="color:red" th:text="${error}"></span>
+			  </div>  
+              
+              <div class="mb-3">
+                <label for="name" class="form-label">
+                  <span class="badge bg-danger">必須</span>
+                  名前
+                </label>
+                <input class="form-control" type="text"
+                  th:errorclass="is-invalid" th:field="*{name}">
+                <div class="invalid-feedback" th:errors="*{name}">
+                </div>
+              </div>
+              
+              <div class="mb-5" th:if="*{id != null}">
+	              <table id="user-table_no" class="table table-sm">
+					<thead>
+						<tr>
+						  <th>予約日</th>
+						  <th>開始時間</th>
+						  <th>終了時間</th>
+						  <th>施設</th>
+						  <th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reservation : ${reservations}" th:if="${reservations!=null}">
+						  <td th:text="${reservation.rday}"></td>
+						  <td th:text="${reservation.rstart}"></td>
+						  <td th:text="${reservation.rend}"></td>
+						  <td th:text="${reservation.facility.name}"></td>
+						  <td><a class="btn btn-primary btn-sm" th:href="@{/reservation/__${reservation.id}__}" role="button">詳細</a></td>
+						</tr>
+					</tbody>
+				  </table>
+				  <small class="text-muted d-flex justify-content-center" th:if="${reservations==null || reservations.size()==0}" th:text="予約はありません"></small>
+              </div>
+              
+              <!--　予約を論理削除した場合size()で0にならない。deleteDateTime!=nullであるものをカウントすることもできない。
+              		予約状況がよりリアルタイムに反映されるメリットを考え予約データをDBから取ってくることにする
+					<tbody>
+						<tr th:each="reservation : *{reservationList}" th:if="${reservation.deleteDateTime==null}">
+						  <td th:text="${reservation.day}"></td>
+						  <td th:text="${reservation.start}"></td>
+						  <td th:text="${reservation.end}"></td>
+						  <td th:text="${reservation.facility.name}"></td>
+						  <td><a class="btn btn-primary btn-sm" th:href="@{/reservation/__${reservation.id}__}" role="button">詳細</a></td>
+						</tr>
+					</tbody>
+				  </table>
+				  <small class="text-muted d-flex justify-content-center" th:if="*{reservationList.size()==0}" th:text="予約はありません"></small>
+				  <input type="hidden" th:field="*{reservationList}">
+			-->
+
+
+				<!-- 登録画面か編集画面か -->
+				<div class="row mb-3">
+				<th:block sec:authorize="hasAuthority('EDIT_MEMBER')">
+				  <div class="col" th:if="*{id == null}">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/member/form}">
+	                	登録
+	              	</button>
+	              </div>
+	              
+	              <div class="col" th:if="*{id != null}">
+	              	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/member/form}">
+	                	更新
+	              	</button>
+	              </div>
+	              
+	              <div class="col" th:if="*{id != null}">
+	              	<!--<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/member/delete}">-->
+					<button class="w-100 btn btn-navy" type="click" th:action="@{/member/deleteButton}" id="actDelete">
+	                	退会
+	              	</button>
+	               </div>
+	             </th:block>
+	             </div>
+ 			</form>
+            
+            
+            <form>
+			  <div class="row mb-3">
+				<div class="col" th:if="*{id != null}">
+	                <button class="w-100 btn btn-info" type="submit" th:formaction="@{/reservation/member/__*{id}__/form}">
+	                	施設予約へ
+	              	</button>    
+                </div>
+            	<div class="col">
+	              	<button class="w-100 btn btn-secondary" type="submit" th:formaction="@{/member/cancel}">
+	                	一覧へ戻る
+	              	</button>
+	             </div>
+			  </div>  
+            </form>
+              
+
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

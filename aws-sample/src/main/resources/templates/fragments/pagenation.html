@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <div th:fragment="pagenation">
+
+  <div th:if="${pageModel != null && pageModel.getTotalElements() != 0}">
+    <span th:text="|全${pageModel.getTotalElements()}件 ${pageModel.getNumber() + 1} / ${pageModel.getTotalPages()} ページを表示中|"> </span>
+    
+<nav aria-label="...">
+  <ul class="pagination mt-1">
+	  <li class="page-item disabled" th:if="${pageModel.isFirst()}">
+        <span class="page-link">&lt;&lt;</span>
+      </li>
+      <li class="page-item" th:unless="${pageModel.isFirst()}">
+        <a class="page-link" th:href="@{/{url}((url = ${listUrl}), page = 0, size = ${pageModel.getSize()}, sort = ${pageModel.getSort().toString().replace(': ', ',')} )}">&lt;&lt;</a>
+	  </li>
+	  
+      <li class="page-item disabled" th:if="${pageModel.isFirst()}">
+        <span class="page-link">&lt;</span>
+      </li>
+      <li class="page-item" th:unless="${pageModel.isFirst()}">
+        <a class="page-link" th:href="@{/{url}((url = ${listUrl}), page = (${pageModel.getNumber() - 1}), size = ${pageModel.getSize()}, sort = ${pageModel.getSort().toString().replace(': ', ',')} )}">&lt;</a>
+	  </li>
+
+      <div
+        th:each="i : ${#numbers.sequence(pageModel.getNumber()-4 < 0 ? 0 : pageModel.getNumber()-4, 
+        pageModel.getNumber()+4 > pageModel.getTotalPages()-1 ? pageModel.getTotalPages()-1 : pageModel.getNumber()+4 )}">
+	      <li class="page-item active" aria-current="page" th:if="${i == pageModel.getNumber()}" >
+	        <span class="page-link" th:href="@{/{url}((url = ${listUrl}), page=${i}, size = ${pageModel.getSize()}, sort = ${pageModel.getSort().toString().replace(': ', ',')} )}" th:text="${i + 1}"></span>
+	      </li>
+	      <li class="page-item" th:if="${i != pageModel.getNumber()
+	      && !(pageModel.getNumber()==1 && i>pageModel.getNumber()+3 ) 
+	      && !(pageModel.getNumber() >1 && i>pageModel.getNumber()+2 ) 
+	      && !(pageModel.getNumber()==pageModel.getTotalPages()-1 && i<pageModel.getNumber()-4 )
+	      && !(pageModel.getNumber()==pageModel.getTotalPages()-2 && i<pageModel.getNumber()-3 )
+	      && !(pageModel.getNumber() <pageModel.getTotalPages()-2 && i<pageModel.getNumber()-2 )
+	      }">
+			<a class="page-link" th:href="@{/{url}((url = ${listUrl}), page=${i}, size = ${pageModel.getSize()}, sort = ${pageModel.getSort().toString().replace(': ', ',')} )}" th:text="${i + 1}"></a>
+		  </li>
+      </div>
+      
+      <li class="page-item disabled" th:if="${pageModel.isLast()}">
+        <span class="page-link">&gt;</span>
+      </li>
+      <li class="page-item" th:unless="${pageModel.isLast()}">
+        <a class="page-link" th:href="@{/{url}((url = ${listUrl}), page = (${pageModel.getNumber() + 1}), size = ${pageModel.getSize()}, sort = ${pageModel.getSort().toString().replace(': ', ',')} )}">&gt;</a>
+	  </li>
+	  
+	  <li class="page-item disabled" th:if="${pageModel.isLast()}">
+        <span class="page-link">&gt;&gt;</span>
+      </li>
+      <li class="page-item" th:unless="${pageModel.isLast()}">
+        <a class="page-link" th:href="@{/{url}((url = ${listUrl}), page = (${pageModel.getTotalPages()-1}), size = ${pageModel.getSize()}, sort = ${pageModel.getSort().toString().replace(': ', ',')} )}">&gt;&gt;</a>
+	  </li>
+
+	<script th:inline="javascript">
+		function screenChange(){
+			location.href = $("#listUrl").val() + '?page=0&size=' + $("#size").val() + '&sort=' +$("#sort").val();
+		}
+	</script>
+  	<form name="sizeForm" method="get" id="size_form" class="ms-3">
+
+	    <select class="form-select" aria-label="Default select example" onChange="screenChange()" id="size">
+			<option value="2" th:selected="${pageModel.getSize() == 2}">2件表示</option>
+    	    <option value="3" th:selected="${pageModel.getSize() == 3}">3件表示</option>
+        	<option value="5" th:selected="${pageModel.getSize() == 5}">5件表示</option>
+        	<option value="10" th:selected="${pageModel.getSize() == 10}">10件表示</option>
+        	<input type="hidden" th:value="${listUrl}" id="listUrl">
+        	<input type="hidden" th:value="${pageModel.getSort().toString().replace(': ', ',')}" id="sort">
+    	</select>
+	</form>
+
+  </ul>
+</nav>
+
+  </div>
+</body>
+</html>
