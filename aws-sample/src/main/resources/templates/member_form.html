@@ -55,10 +55,12 @@
                 </div>
               </div>
               
-              <!--class typeのエラーメッセージを表示する。-->
-              <div th:each="error : ${#fields.globalErrors()}">
-				   <span style="color:red" th:text="${error}"></span>
-			  </div>  
+              <!--相関チェックのエラーメッセージを表示する。-->
+              <div class="mb-3">
+	              <div class="alert alert-danger" role="alert" th:each="error : ${#fields.globalErrors()}">
+					   <span style="color:red" th:text="${error}"></span>
+				  </div>
+			  </div>
               
               <div class="mb-3">
                 <label for="name" class="form-label">

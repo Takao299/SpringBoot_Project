@@ -203,7 +203,7 @@
               	</button>
               </div>
               
-              <div class="col" th:if="${user.id != null && user.id != 1}">
+              <div class="col" th:if="${user.id != null}">
               	<button class="w-100 btn btn-navy" type="submit" th:formaction="@{/adminUser/form}">
                 	更新
               	</button>

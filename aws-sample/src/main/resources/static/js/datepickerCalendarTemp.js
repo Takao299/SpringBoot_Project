@@ -21,11 +21,11 @@ $(function(){
 		let date = new Date(val);
 		//今日
 		let today = new Date();
-		//今日と選択された日付を比較 (過去ならマイナス､未来ならプラスになる)
+		//今日と選択された日付を比較 (過去ならマイナス､未来ならプラスになる 今日は0)
 		let is_future = new Date(formatDate(date)) - new Date(formatDate(today)); //alert(is_future < 0);
 		
 		//臨時営業・休業日が重複しておらず 過去ではなく 4年先以内の"数値"になる
-		if ( tempday.indexOf(formatDate(date)) === -1 && is_future > 0 && is_future < 126316800000 ) {
+		if ( tempday.indexOf(formatDate(date)) === -1 && is_future >= 0 && is_future < 126316800000 ) {
 			//console.log(val);
 			//console.log(date);
 			//console.log(formatDate(date));
