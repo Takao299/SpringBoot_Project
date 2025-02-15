@@ -703,7 +703,6 @@ public class AndroidController {
             	return result_json = "{\"id\":\"-1\"}";
 
             Member member = memberRepository.findById(Long.parseLong(sessionData.getMemberId())).get();
-            //MemberのID、email、nameだけ欲しいので他が余計。特にreservationListがOneToManyで無駄に参照している
             Member send_member = new Member();
             send_member.setId(member.getId());
             send_member.setEmail(member.getEmail());
