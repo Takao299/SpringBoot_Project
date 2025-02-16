@@ -5,6 +5,10 @@ Eclipse IDE for Java Developers
 Version: 2023-09 (4.29.0)
 
 
+------ ローカル環境でのデフォルトのログイン画面URL ------
+http://localhost:8080/aws-sample/login
+
+
 ------ メール認証について ------
 メール認証機能ではGmailのSMTPサーバーを利用しています。
 SpringBoot(Webアプリ)のapplicaiton.ymlに、
